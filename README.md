@@ -5,8 +5,8 @@
 
 接著對每個技術點盡量以最簡單的方式解說. 如果對量化還不是那麼熟悉, 建議參考一下文章後半段的"簡單回顧量化"
 
-## 量化技術和流程
 ---
+## 量化技術和流程
 
 ### Floating Model Training
 這階段主要是讓訓練出來的 floating model 有利於之後量化的技術
@@ -36,10 +36,8 @@ PTQ 是針對 float model 做量化的技術, 不需要 training data, 通常只
 - **K-means** [[paper](https://arxiv.org/abs/1510.00149)], **DKM** [[paper](https://arxiv.org/abs/2108.12659)]: 屬於 nonlinear 量化, 利用 Kmeans 求出代表性的 codebook. DKM 為進一步改進的方法.
 - **N2UQ** [[paper](https://arxiv.org/abs/2111.14826)]: 屬於 nonlinear 量化, 讓量化區間變成可學的 (固定的量化區間就是線性量化).
 
-
-
-## 簡單回顧量化
 ---
+## 簡單回顧量化
 
 量化就是將 float $X$ 用有限個點來表示, 如下圖
 

@@ -42,7 +42,9 @@ PTQ 是針對 float model 做量化的技術, 不需要 training data, 通常只
 ---
 
 量化就是將 float $X$ 用有限個點來表示, 如下圖
-<img src="pic/most_general_quant.png" width=100% height=100%>
+
+<center><img src="pic/most_general_quant.png" width=70% height=70%></center>
+
 $\tilde{X}$ 的 4 個點對應到原來的 $X$ 可以看到是很不規則的, 或是說非線性
 如果說這有限個點採用"線性"的對應方式, 則我們可以寫成下面式子對應關係:
 
@@ -64,14 +66,14 @@ $$
 - Symmetric: $Z=0$ 時為對稱量化
 - Dynamic: qparam 在 inference 時才去統計出
 - Static: qparam 在 inference 之前就事先統計好
-- Quantization Granuity [[SongHan slide](https://hanlab.mit.edu/courses/2023-fall-65940)]:
-   <img src="pic/quantization_granuity.png" width=40% height=40%>
+- Quantization Granuity [[SongHan slide](https://hanlab.mit.edu/courses/2023-fall-65940)]:   
   - per-tensor: 整個 weight or activation tensor 共用同一組 qparam
   - per-channel: 同一個 channel 共用同一組 qparam, 例如以 convolution kernel 來說, 同一個 output channel 的 weights 共用同一組 qparam
   - per-group: 常用在 LLM 的 Transformer, 通常以 64, 128 為一組共用 qparam
+<center><img src="pic/quantization_granuity.png" width=40% height=40%></center>
 
 另外, 我們常說的 quant, de-quant, re-quant, fake-quant 可以用下圖來表示:
-<img src="pic/quantize_ops.png" width=100% height=100%> 
+<img src="pic/quantize_ops.png" width=80% height=80%> 
 
 
 

@@ -5,8 +5,6 @@
 
 接著對每個技術點盡量以最簡單的方式解說. 如果對量化還不是那麼熟悉, 建議參考一下文章後半段的"簡單回顧量化"
 
-<!-- more -->
-
 ## 量化技術和流程
 ---
 
@@ -44,34 +42,30 @@ PTQ 是針對 float model 做量化的技術, 不需要 training data, 通常只
 ---
 
 量化就是將 float $X$ 用有限個點來表示, 如下圖
-<img src="pic/most_general_quant.png" width=80% height=80%>
+<img src="pic/most_general_quant.png" width=100% height=100%>
 $\tilde{X}$ 的 4 個點對應到原來的 $X$ 可以看到是很不規則的, 或是說非線性
 如果說這有限個點採用"線性"的對應方式, 則我們可以寫成下面式子對應關係:
 
-{% math %}
+$$
 \begin{align}
 \hat{X}=\text{clip}\left(\text{round}\left(X\over S\right)+Z,l,u\right) \\
 \tilde{X}=S(\hat{X}-Z)
 \end{align}
-{% endmath %}
+$$
 $Z,S$ 分別稱為 zero point 和 scale, 而 $l,u$ 是 clipping 的 lower and upper bound.
 所以量化參數 quantization parameters (用 qparam 簡稱) 就是
-{% math %}
+$$
 \begin{align}
 \text{qparam}=\{Z,S,l,u\}
 \end{align}
-{% endmath %}
+$$
 
-- Quantization Meam Square Error (MSE):
-   {% math %}
-   \begin{align}\mathbb{E}_X[(X-\tilde{X})^2]
-   \end{align}
-   {% endmath %}
+- Quantization Meam Square Error (MSE): $\mathbb{E}_X[(X-\tilde{X})^2]$
 - Symmetric: $Z=0$ 時為對稱量化
 - Dynamic: qparam 在 inference 時才去統計出
 - Static: qparam 在 inference 之前就事先統計好
 - Quantization Granuity [[SongHan slide](https://hanlab.mit.edu/courses/2023-fall-65940)]:
-<img src="pic/quantization_granuity.png" width=40% height=40%>
+   <img src="pic/quantization_granuity.png" width=40% height=40%>
   - per-tensor: 整個 weight or activation tensor 共用同一組 qparam
   - per-channel: 同一個 channel 共用同一組 qparam, 例如以 convolution kernel 來說, 同一個 output channel 的 weights 共用同一組 qparam
   - per-group: 常用在 LLM 的 Transformer, 通常以 64, 128 為一組共用 qparam

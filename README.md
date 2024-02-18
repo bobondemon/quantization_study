@@ -18,9 +18,9 @@
 PTQ 是針對 float model 做量化的技術, 不需要 training data, 通常只需要些許的 calibration data 即可, 有些技術仍會需要算 gradients, 而有些不用, 甚至連 calibration data 都不用.
 一般來說 PTQ 效果會比 QAT 差, 但速度比 QAT 快多了, 同時針對 LLM 這種大模型 QAT 成本太高都只能使用 PTQ.
 - **CLE, Bias Absorption, Bias Correction** [[paper](https://arxiv.org/abs/1906.04721)]: Qaulcomm DFQ (Data Free Quantization 技術), 詳見 [[blog](https://bobondemon.github.io/2023/11/24/Qualcomm-Data-Free-Quantization-%E8%A9%B3%E8%AE%80/)]
-- **AdaRound** [[paper](https://arxiv.org/abs/2004.10568)]: weight 量化時 (式 (1)) 的 rounding (四捨五入) 不一定是最佳的, 找出使用 floor 或 ceil 的最佳組合來取代全部都用 rounding 的方式
+- **AdaRound** [[paper](https://arxiv.org/abs/2004.10568)]: weight 量化時的 rounding (四捨五入) 不一定是最佳的, 找出使用 floor 或 ceil 的最佳組合來取代全部都用 rounding 的方式
 - **OBQ** (Optimal Brain Quantization) [[paper](https://arxiv.org/abs/2208.11580)]: 對於 weights 在 quantize 其中一個元素後還要調整其他元素, 使得 quantization 對 output activatyions 的 re-construction error 最小.
-- **OCTAV** (Optimally Clipped Tensors And Vectors)[[paper](https://arxiv.org/abs/2206.06501)]: 找出最佳的 scale $S$ 使得 quantization MSE 最小 (式 (4)), 詳見[[blog1](https://bobondemon.github.io/2023/10/28/Quantization-Error-Case-without-Clipping/), [blog2](https://bobondemon.github.io/2023/11/04/Quantization-Error-Case-with-Clipping/)]
+- **OCTAV** (Optimally Clipped Tensors And Vectors)[[paper](https://arxiv.org/abs/2206.06501)]: 找出最佳的 scale $S$ 使得 quantization MSE 最小, 詳見[[blog1](https://bobondemon.github.io/2023/10/28/Quantization-Error-Case-without-Clipping/), [blog2](https://bobondemon.github.io/2023/11/04/Quantization-Error-Case-with-Clipping/)]
 - **Transformer GPTQ** (WOQ) [[paper](https://arxiv.org/abs/2210.17323)]: 基於 OBQ 的技術來針對 Transformer 做些改進和加速. Weight-Only-Quantization (WOQ)
 - **Transformer AWQ** (WOQ) [[paper](https://arxiv.org/abs/2306.00978)]: 對 input activations 值域特別大的那些 channels 做 scaling 處理, 這樣能維持 LLM 的效果, 詳見筆記 [[blog](https://bobondemon.github.io/2023/12/28/AWQ-%E7%AD%86%E8%A8%98/)]. Weight-Only-Quantization (WOQ)
 - **Transformer SmoothQuant** [[paper](https://arxiv.org/abs/2211.10438v5)]: 透過一些等價的轉換將 activations 的 scale 縮小並放大 weights 的 scale, 使得 activations 變的較容易 quant 而 weights 仍然容易 quant. 詳見筆記 [[blog](https://bobondemon.github.io/2023/12/28/SmoothQuant-%E7%AD%86%E8%A8%98/)]
@@ -32,7 +32,7 @@ PTQ 是針對 float model 做量化的技術, 不需要 training data, 通常只
 - **MAD** [[in OCTAV paper](https://arxiv.org/abs/2206.06501)]: 改善了 STE 對於 clipping op 的 under estimate 問題, 詳見論文裡的 figure 3 and appendix C.
 - **PACT** [[paper](https://arxiv.org/abs/1805.06085)]: 使得 $l,u$ 這兩個 clipping 上下界能被學習, 限制數值範圍. 可以放在 QAT 過程中使用.
 - **LSQ+** [[paper](https://arxiv.org/abs/2004.09576)]: 使得 $S,Z$ 這兩個 qparam 能被學習, 詳見筆記 [[blog](https://bobondemon.github.io/2022/12/04/Learning-Zero-Point-and-Scale-in-Quantization-Parameters/)]
-- **OCTAV** (Optimally Clipped Tensors And Vectors)[[paper](https://arxiv.org/abs/2206.06501)]: 找出最佳的 scale $S$ 使得 quantization MSE 最小 (式 (4)), 詳見[[blog1](https://bobondemon.github.io/2023/10/28/Quantization-Error-Case-without-Clipping/), [blog2](https://bobondemon.github.io/2023/11/04/Quantization-Error-Case-with-Clipping/)]. 除了上面 PTQ 做之外, 也可放在 QAT 過程中.
+- **OCTAV** (Optimally Clipped Tensors And Vectors)[[paper](https://arxiv.org/abs/2206.06501)]: 找出最佳的 scale $S$ 使得 quantization MSE 最小, 詳見[[blog1](https://bobondemon.github.io/2023/10/28/Quantization-Error-Case-without-Clipping/), [blog2](https://bobondemon.github.io/2023/11/04/Quantization-Error-Case-with-Clipping/)]. 除了上面 PTQ 做之外, 也可放在 QAT 過程中.
 - **K-means** [[paper](https://arxiv.org/abs/1510.00149)], **DKM** [[paper](https://arxiv.org/abs/2108.12659)]: 屬於 nonlinear 量化, 利用 Kmeans 求出代表性的 codebook. DKM 為進一步改進的方法.
 - **N2UQ** [[paper](https://arxiv.org/abs/2111.14826)]: 屬於 nonlinear 量化, 讓量化區間變成可學的 (固定的量化區間就是線性量化).
 
@@ -54,11 +54,13 @@ $$
 \tilde{X}=S(\hat{X}-Z)
 \end{align}
 $$
+
 $Z,S$ 分別稱為 zero point 和 scale, 而 $l,u$ 是 clipping 的 lower and upper bound.
 所以量化參數 quantization parameters (用 qparam 簡稱) 就是
+
 $$
 \begin{align}
-\text{qparam}=\{Z,S,l,u\}
+\text{qparam}=\\{Z,S,l,u\\}
 \end{align}
 $$
 

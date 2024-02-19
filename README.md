@@ -75,5 +75,18 @@ $$
 另外, 我們常說的 quant, de-quant, re-quant, fake-quant 可以用下圖來表示:
 <img src="pic/quantize_ops.png" width=80% height=80%> 
 
+---
+## Model Compression Toolkits
+以下蒐集一些重要的模型壓縮 repositories, 因此不限於量化, 有些還包含 pruning, NAS, distillation, 或圖優化等
+- Microsoft [Olive](https://github.com/microsoft/Olive?tab=readme-ov-file)
+- Microsoft [NNI](https://github.com/microsoft/nni) (Neural Network Intelligence): with NAS, [Pruning](https://nni.readthedocs.io/en/v2.10/compression/pruner.html), [Quantization](https://nni.readthedocs.io/en/v2.10/compression/quantizer.html), Distilling
+- OpenVino [Neural Network Compression Framework (NNCF)](https://github.com/openvinotoolkit/nncf)
+- Intel [Neural Compressor](https://github.com/intel/neural-compressor): with NAS, [Pruning](https://intel.github.io/neural-compressor/latest/docs/source/pruning.html), [Quantization](https://intel.github.io/neural-compressor/latest/docs/source/quantization.html), [Distillation](https://intel.github.io/neural-compressor/latest/docs/source/distillation.html)
+- Qualcomm [AIMET](https://github.com/quic/aimet): Quantization (DFQ and AdaRound, QAT), Model Compression (Spatial SVD, Channel pruning)
+- NVidia [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM): optimize LLM (Transformer-based) models on NVidia GPU, using techniques such as Multi-query Attention ([MQA](https://arxiv.org/abs/1911.02150)), Group-query Attention([GQA](https://arxiv.org/abs/2307.09288)), Paged KV Cache, [SmoothQuant](https://arxiv.org/abs/2211.10438), [GPTQ](https://arxiv.org/abs/2210.17323), [AWQ](https://arxiv.org/abs/2306.00978), [Speculative decoding](https://arxiv.org/abs/2211.17192), …
+- Sony [Model Compression Toolkit (MCT)](https://github.com/sony/model_optimization): Quantization with PTQ, GPTQ, QAT, Enhanced Post-Training Quantization ([EPTQ](https://github.com/sony/model_optimization?tab=readme-ov-file#enhanced-post-training-quantization-eptq)). [Structured Pruning](https://github.com/sony/model_optimization?tab=readme-ov-file#structured-pruning)
+
+
+
 
 

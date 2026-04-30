@@ -1,5 +1,5 @@
-總結一下 (up to 2024-02-17) 目前學習的量化技術和流程圖 (本篇文章同時也記錄於 [blog]
-(https://bobondemon.github.io/2024/02/17/%E9%87%8F%E5%8C%96%E6%8A%80%E8%A1%93%E8%B7%AF%E7%B7%9A/) 中)
+總結一下 (up to 2024-02-17) 目前學習的量化技術和流程圖 (本篇文章同時也記錄於 [blog](https://bobondemon.github.io/2024/02/17/%E9%87%8F%E5%8C%96%E6%8A%80%E8%A1%93%E8%B7%AF%E7%B7%9A/) 中)
+
 更新: (2026-04-30) 新增 LLM Transformer 相關 PTQ 方法, 如: QuIP, QuIP#, SpinQuant.
 <img src="pic/quantization_flowchart.png" width=100% height=100%> Post Training Quantization (PTQ) 稱事後量化. Quantization Aware Training (QAT) 表示訓練時考慮量化造成的損失來做訓練
 為了得到 fixed point model 可以對事先訓練好的 float model 做 PTQ 或 QAT, 或是直接從 QAT 流程開始
